@@ -6,13 +6,55 @@ import java.util.Scanner;
 
 public class MainShelter {
 	private static int maxShelterSize = 4;
-	static ArrayList<Animal> animalList = new ArrayList<>(maxShelterSize);
+	public static ArrayList<Animal> animalList = new ArrayList<>(maxShelterSize);
 	static Scanner keyboard_input = new Scanner(System.in);
 	public static IdGenerator idGenertor = new IdGenerator();
 	static MainShelter main = new MainShelter();
 	public static ArrayList<Integer> idList = idGenertor.generateListOfAvailIds();
 
-	public static void showMenu() {
+	public static void main(String[] args) throws IOException {
+		
+		int noOfAnimals = 0;
+		animalList = StoreDataSeriaization.readFromFile();
+		showMenu(noOfAnimals);
+		
+		
+		int finalsize = animalList.size();
+		StoreDataSeriaization.writeToFile(finalsize); //zapisywanie obiektu wraz z ilością obiektów
+		System.out.println("# animals to save: "+ finalsize);
+		
+		System.out.println("bye, status saved");
+	}
+
+	public int checkStatus() {
+		return animalList.size();
+	}
+
+	static void addAnimal() {
+		System.out.println("To add new animal to shelter enter id, name and age of new animal");
+
+		int id = idGenertor.drawRandomId(idList);
+		System.out.print("name: ");
+		String name = keyboard_input.next();
+		System.out.print("age: ");
+		int age = keyboard_input.nextInt();
+		System.out.println("You added new animal to the shelter ");
+		Animal newAnimal = new Animal(id, name, age);
+		animalList.add(newAnimal);
+		idGenertor.removeId(id, idList);
+	}
+
+	public static int findAnimalIndex(int id) {
+
+		for (Animal animal : animalList) {
+			if (animal.getId() == id) {
+				return animalList.indexOf(animal);
+			}
+		}
+		return -1;
+	}
+
+	public static void showMenu(int noOfAnimals) {
 
 		StringBuilder menu = new StringBuilder("HELLO");
 		menu.append("\nWelcome to our shelter \"Chicken Wing\", to:  ");
@@ -22,11 +64,6 @@ public class MainShelter {
 				.append("\ngo back to menu enter:            menu");
 
 		System.out.println(menu);
-	}
-
-	public static void main(String[] args) throws IOException {
-		int noOfAnimals = 0;
-		showMenu();
 
 		String wybor = null;
 		do {
@@ -79,38 +116,8 @@ public class MainShelter {
 			}
 				break;
 			case "menu":
-				showMenu();
+				showMenu(noOfAnimals);
 			}
 		} while (!wybor.equals("quit"));
-
-		System.out.println("bye !");
-	}
-
-	public int checkStatus() {
-		return animalList.size();
-	}
-
-	static void addAnimal() {
-		System.out.println("To add new animal to shelter enter id, name and age of new animal");
-
-		int id = idGenertor.drawRandomId(idList);
-		System.out.print("name: ");
-		String name = keyboard_input.next();
-		System.out.print("age: ");
-		int age = keyboard_input.nextInt();
-		System.out.println("You added new animal to the shelter ");
-		Animal newAnimal = new Animal(id, name, age);
-		animalList.add(newAnimal);
-		idGenertor.removeId(id, idList);
-	}
-
-	public static int findAnimalIndex(int id) {
-
-		for (Animal animal : animalList) {
-			if (animal.getId() == id) {
-				return animalList.indexOf(animal);
-			}
-		}
-		return -1;
 	}
 }

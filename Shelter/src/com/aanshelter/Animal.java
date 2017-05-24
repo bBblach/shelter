@@ -1,6 +1,12 @@
 package com.aanshelter;
 
-public class Animal {
+import java.io.Serializable;
+
+public class Animal implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4965062370588279006L;
 	private int id;
 	private String name;
 	private int age;
@@ -38,5 +44,9 @@ public class Animal {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return ("["+ "id="+this.id+",name="+this.name+",age="+this.age+"]");
+	}
 }
